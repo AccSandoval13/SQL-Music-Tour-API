@@ -1,32 +1,26 @@
-'use strict'; 
+'use strict';
 const {
-    Model
-} = require('sequelize'); 
-module.exports = (sequelize, DataTypes) => { 
-    class Band extends Model {
-        static associate(models) {
-            Band.hasMany(models.MeetGreet, {
-                foreignKey: 'band_id', 
-                as: "meet_greets"
-            })
-        }
-    } 
-    
-
-// Band init is a method that takes in an object 
-// with the column names as keys and the data types as values 
-// We are setting up the model base for the data we want to store in our database 
-// This is setting it up in the Sequelize instance / layer 
-    
-static associate([models]) {
-    Band.hasMany(MeetGreets, {
-        foreignKey: 'band_id', 
-        as: "meet_greets"
-    })
-    }   
-}     
-
-Band.init({
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class Band extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate({ Meet_Greet, Set_Time }) {
+      Band.hasMany(Meet_Greet, {
+        foreignKey: 'band_id',
+        as: 'meet_greets'
+      })
+      Band.hasMany(Set_Time, {
+        foreignKey: 'band_id',
+        as: 'set_times'
+      })
+    }
+  }
+  Band.init({
     band_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -47,18 +41,12 @@ Band.init({
     end_time: {
         type: DataTypes.DATE,
         allowNull: false
-    },
-    members: {
-        type: DataTypes.SMALLINT,
-        allowNull: false
     }
-}, {
+  }, {
     sequelize,
-    //modelName: 'Band', is capitalized by default because it's a class 
     modelName: 'Band',
     tableName: 'band',
     timestamps: false
-})
-
-// EXPORT
-module.exports = Band
+  });
+  return Band;
+};
